@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.28407.52
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SpanTests", "SpanTests\SpanTests.csproj", "{6007564E-A787-4E6B-83F7-B4F6679B2FAD}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SpanTests.Core", "SpanTests.Core\SpanTests.Core.csproj", "{CDA2E752-4432-4C30-8D9C-B49CBC2FF046}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{6007564E-A787-4E6B-83F7-B4F6679B2FAD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6007564E-A787-4E6B-83F7-B4F6679B2FAD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6007564E-A787-4E6B-83F7-B4F6679B2FAD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6007564E-A787-4E6B-83F7-B4F6679B2FAD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CDA2E752-4432-4C30-8D9C-B49CBC2FF046}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CDA2E752-4432-4C30-8D9C-B49CBC2FF046}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CDA2E752-4432-4C30-8D9C-B49CBC2FF046}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CDA2E752-4432-4C30-8D9C-B49CBC2FF046}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {86DCFADD-8FC5-4CA1-9216-AA6E9109C140}
+	EndGlobalSection
+EndGlobal

@@ -1,0 +1,38 @@
+﻿using SpanTests.Core.ObjectModel;
+using SpanTests.Core.Tokenization;
+using System;
+
+namespace SpanTests.Core.Parsing
+{
+    internal sealed class StringParser : Parser
+    {
+        #region Properties
+
+        public override JsonObjectType Type => JsonObjectType.String;
+
+        #endregion
+
+        #region Methods
+
+        /// <summary>
+        /// <see cref="Parser.TryParse(ref ReadOnlySpan{char})"/>
+        /// </summary>
+        public override ReadOnlySpan<char> TryParse(ref ReadOnlySpan<char> content)
+        {
+            int startIndex = 1; // The first char is a "
+            int stringEndsAt = content.IndexOf(JsonToken.NameBoundary, startIndex);
+            if (stringEndsAt < 0)
+            {
+                throw new InvalidOperationException("Unable to parse a string");
+            }
+
+            ReadOnlySpan<char> result = content.Slice(startIndex, stringEndsAt - startIndex);
+
+            content = content.Slice(stringEndsAt + 1);  // +1 for the trailing "
+
+            return result;
+        }
+
+        #endregion
+    }
+}
