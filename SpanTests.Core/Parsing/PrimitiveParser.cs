@@ -1,25 +1,13 @@
 ﻿using System;
-using SpanTests.Core.ObjectModel;
 
 namespace SpanTests.Core.Parsing
 {
-    internal sealed class PrimitiveParser : Parser
+    internal static class PrimitiveParser
     {
-        #region Properties
-
-        /// <summary>
-        /// <see cref="Parser.Type"/>
-        /// </summary>
-        public override JsonObjectType Type => JsonObjectType.Primitive;
-
-        #endregion
-
-        #region Instance methods
-
         /// <summary>
         /// <see cref="Parser.TryParse(ref ReadOnlySpan{char})"/>
         /// </summary>
-        public override ReadOnlySpan<char> TryParse(ref ReadOnlySpan<char> content)
+        public static ReadOnlySpan<char> TryParse(ref ReadOnlySpan<char> content)
         {
             int primitiveEndIndex = 0;
             for (; primitiveEndIndex < content.Length; ++primitiveEndIndex)
@@ -36,10 +24,6 @@ namespace SpanTests.Core.Parsing
             return result;
         }
 
-        #endregion
-
-        #region Static methods
-
         public static bool IsPrimitive(ReadOnlySpan<char> content)
         {
             return IsPrimitive(content[0]);
@@ -49,7 +33,5 @@ namespace SpanTests.Core.Parsing
         {
             return char.IsLetterOrDigit(value) || char.IsSurrogate(value);
         }
-
-        #endregion
     }
 }

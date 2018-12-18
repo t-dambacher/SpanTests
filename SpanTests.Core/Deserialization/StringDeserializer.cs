@@ -10,7 +10,7 @@ namespace SpanTests.Core.Deserialization
         /// <summary>
         /// Deserialize the given <see cref="ReadOnlySpan{char}"/> into a string
         /// </summary>
-        public static string Deserialize(ReadOnlySpan<char> content)
+        public static string Deserialize(ref ReadOnlySpan<char> content)
         {
             return new string(content);
         }

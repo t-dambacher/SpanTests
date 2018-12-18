@@ -12,9 +12,9 @@ namespace SpanTests.Core.Deserialization
         /// <summary>
         /// Deserialize the given <see cref="ReadOnlySpan{char}"/> into the given primitive type
         /// </summary>
-        public static object Deserialize(ReadOnlySpan<char> content, Type primitiveType)
+        public static object Deserialize(ref ReadOnlySpan<char> content, Type primitiveType)
         {
-            string value = StringDeserializer.Deserialize(content);
+            string value = StringDeserializer.Deserialize(ref content);
             return TypeDescriptor.GetConverter(primitiveType).ConvertFromString(value);
         }
     }

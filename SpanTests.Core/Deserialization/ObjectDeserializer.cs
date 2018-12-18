@@ -11,7 +11,7 @@ namespace SpanTests.Core.Deserialization
     /// </summary>
     internal static class ObjectDeserializer
     {
-        public static object Deserialize(ReadOnlySpan<char> content, Type objectType)
+        public static object Deserialize(ref ReadOnlySpan<char> content, Type objectType)
         {
             content = ObjectParser.GetBoundaries(ref content);
             var tokenizer = new JsonPropertyTokenizer(ref content);

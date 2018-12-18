@@ -10,18 +10,18 @@ namespace SpanTests.Core.Deserialization
     /// </summary>
     internal static class Deserializer
     {
-        public static object Deserialize(JsonObjectType type, ReadOnlySpan<char> content, Type resultType)
+        public static object Deserialize(JsonObjectType type, ref ReadOnlySpan<char> content, Type resultType)
         {
             switch (type)
             {
                 case JsonObjectType.Array:
-                    return CollectionDeserializer.Deserialize(content, resultType);
+                    return CollectionDeserializer.Deserialize(ref content, resultType);
                 case JsonObjectType.Object:
-                    return ObjectDeserializer.Deserialize(content, resultType);
+                    return ObjectDeserializer.Deserialize(ref content, resultType);
                 case JsonObjectType.Primitive:
-                    return PrimitiveDeserializer.Deserialize(content, resultType);
+                    return PrimitiveDeserializer.Deserialize(ref content, resultType);
                 case JsonObjectType.String:
-                    return StringDeserializer.Deserialize(content);
+                    return StringDeserializer.Deserialize(ref content);
                 default:
                     throw new ArgumentException(nameof(type));
             }

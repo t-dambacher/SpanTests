@@ -15,7 +15,7 @@ namespace SpanTests.Core.Deserialization
     {
         private static readonly Dictionary<Type, Type> elementTypes = new Dictionary<Type, Type>();
 
-        public static object Deserialize(ReadOnlySpan<char> content, Type arrayType)
+        public static object Deserialize(ref ReadOnlySpan<char> content, Type arrayType)
         {
             object collection = BuildCollection(arrayType, out Type collectionType, out Type elementType);
 
@@ -24,34 +24,22 @@ namespace SpanTests.Core.Deserialization
             {
                 content = content.TrimWhitespaces();
 
-                AppendToCollection(collection, GetSubElements(content, elementType), collectionType, elementType);
+                AppendToCollection(collection, ref content, collectionType, elementType);
             }
 
             return collection;
         }
 
-        private static List<object> GetSubElements(ReadOnlySpan<char> content, Type elementType)
+        private static void AppendToCollection(object collection, ref ReadOnlySpan<char> content, Type collectionType, Type elementType)
         {
-            List<object> result = new List<object>();
-
+            Action<object, object> adder = CollectionMethodStore.GetAddMethod(collectionType, elementType);
             var tokenizer = new JsonArrayTokenizer(content);
 
             while (tokenizer.HasContent)
             {
                 JsonObject value = tokenizer.GetNextObject();
-                result.Add(value.GetValue(elementType));
-            }
-
-            return result;
-        }
-
-        private static void AppendToCollection(object collection, List<object> elements, Type collectionType, Type elementType)
-        {
-            Action<object, object> adder = CollectionMethodStore.GetAddMethod(collectionType, elementType);
-
-            foreach (object element in elements)
-            {
-                adder(collection, element);
+                object subValue = value.GetValue(elementType);
+                adder(collection, subValue);
             }
         }
 

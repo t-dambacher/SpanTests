@@ -41,6 +41,11 @@ namespace SpanTests.Core.Reflection
         private static Func<object> GetCtorFromRuntime(Type type)
         {
             ConstructorInfo emptyConstructor = type.GetConstructor(Type.EmptyTypes);
+            if (type == null)
+            {
+                throw new InvalidOperationException($"No empty ctor found for type {type.Name}.");
+            }
+
             var dynamicMethod = new DynamicMethod("CreateInstance", type, Type.EmptyTypes, true);
             ILGenerator ilGenerator = dynamicMethod.GetILGenerator();
             ilGenerator.Emit(OpCodes.Nop);

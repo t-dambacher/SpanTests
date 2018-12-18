@@ -4,23 +4,12 @@ using System;
 
 namespace SpanTests.Core.Parsing
 {
-    internal sealed class ArrayParser : Parser
+    internal static class ArrayParser
     {
-        #region Properties
-
-        /// <summary>
-        /// <see cref="Parser.Type"/>
-        /// </summary>
-        public override JsonObjectType Type => JsonObjectType.Array;
-
-        #endregion
-
-        #region Methods
-
         /// <summary>
         /// <see cref="Parser.TryParse(ref ReadOnlySpan{char})"/>
         /// </summary>
-        public override ReadOnlySpan<char> TryParse(ref ReadOnlySpan<char> content)
+        public static ReadOnlySpan<char> TryParse(ref ReadOnlySpan<char> content)
         {
             int arrayEndIndex = 0;
             for (int openedBracketsCount = 0; arrayEndIndex < content.Length; ++arrayEndIndex)
@@ -48,10 +37,6 @@ namespace SpanTests.Core.Parsing
 
             return array;
         }
-
-        #endregion
-
-        #region Static methods
 
         public static int GetNextArraySeparatorIndex(ReadOnlySpan<char> content, JsonObjectType expectedType)
         {
@@ -109,7 +94,5 @@ namespace SpanTests.Core.Parsing
 
             return content.Length;
         }
-
-        #endregion
     }
 }
