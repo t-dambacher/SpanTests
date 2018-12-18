@@ -20,11 +20,14 @@ namespace SpanTests.Core.Deserialization
             object collection = BuildCollection(arrayType, out Type collectionType, out Type elementType);
 
             // Append objects to the collection
-            if (!content.IsEmptyOrWhiteSpace())
+            if (!content.IsEmpty)
             {
-                content.TrimWhitespaces();
+                content = content.Trim();
 
-                AppendToCollection(collection, ref content, collectionType, elementType);
+                if (!content.IsWhiteSpace())
+                {
+                    AppendToCollection(collection, ref content, collectionType, elementType);
+                }
             }
 
             return collection;

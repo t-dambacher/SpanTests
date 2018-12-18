@@ -38,7 +38,7 @@ namespace SpanTests.Core.Parsing
             return array;
         }
 
-        public static ReadOnlySpan<char> GetBoundaries(ref ReadOnlySpan<char> content)
+        public static ReadOnlySpan<char> GetBoundaries(ReadOnlySpan<char> content)
         {
             return content.GetBoundaries(JsonToken.ObjectStart, JsonToken.ObjectEnd);
         }

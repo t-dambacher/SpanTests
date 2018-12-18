@@ -1,6 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
-using SpanTests.Core.ObjectModel;
 
 namespace SpanTests.Core.Deserialization
 {
@@ -9,13 +9,22 @@ namespace SpanTests.Core.Deserialization
     /// </summary>
     internal static class PrimitiveDeserializer
     {
+        private static Dictionary<Type, TypeConverter> converters = new Dictionary<Type, TypeConverter>();
+
         /// <summary>
         /// Deserialize the given <see cref="ReadOnlySpan{char}"/> into the given primitive type
         /// </summary>
         public static object Deserialize(ref ReadOnlySpan<char> content, Type primitiveType)
         {
             string value = StringDeserializer.Deserialize(ref content);
-            return TypeDescriptor.GetConverter(primitiveType).ConvertFromString(value);
+
+            if (!converters.TryGetValue(primitiveType, out  TypeConverter converter))
+            {
+                converter = TypeDescriptor.GetConverter(primitiveType);
+                converters.Add(primitiveType, converter);
+            }
+
+            return converter.ConvertFromString(value);
         }
     }
 }

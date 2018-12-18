@@ -34,7 +34,7 @@ namespace SpanTests.Core
         static public T Parse<T>(ReadOnlySpan<char> content)
             where T : class
         {
-            if (content.IsEmptyOrWhiteSpace())
+            if (content.IsEmpty || content.IsWhiteSpace())
             {
                 throw new ArgumentException(nameof(content));
             }

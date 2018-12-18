@@ -81,8 +81,7 @@ namespace SpanTests.Core.Tokenization
                 throw new InvalidOperationException("Unable to find a separator in the content");
             }
 
-            content = content.Slice(nameSeparatorAt);
-            content.TrimWhitespaces();
+            content.TrimWhitespaces(nameSeparatorAt);
 
             return name;
         }

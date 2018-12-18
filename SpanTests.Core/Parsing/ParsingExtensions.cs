@@ -5,14 +5,9 @@ namespace SpanTests.Core.Parsing
 {
     internal static class ParsingExtensions
     {
-        public static bool IsEmptyOrWhiteSpace(this ReadOnlySpan<char> content)
+        public static int GetContentStartIndex(this ReadOnlySpan<char> content, int startIndex = 0)
         {
-            return content.IsEmpty || content.IsWhiteSpace();
-        }
-
-        public static void TrimStartingSeparatorsAndWhitespaces(this ref ReadOnlySpan<char> content)
-        {
-            int contentStartsAt = 0;
+            int contentStartsAt = startIndex;
             for (; contentStartsAt < content.Length; ++contentStartsAt)
             {
                 char value = content[contentStartsAt];
@@ -22,17 +17,21 @@ namespace SpanTests.Core.Parsing
                 }
             }
 
-            if (contentStartsAt == 0)
-            {
-                return;
-            }
-
-            content = content.Slice(contentStartsAt);
+            return contentStartsAt;
         }
 
-        public static ReadOnlySpan<char> TrimWhitespaces(this ReadOnlySpan<char> content)
+        public static void TrimWhitespaces(this ref ReadOnlySpan<char> content, int startAt = 0)
         {
-            int contentStartsAt = 0;
+            content.GetWhitespacesIndexes(out int startIndex, out int endIndex, startAt);
+            if (startIndex != startAt || endIndex != content.Length - 1)
+            {
+                content = content.Slice(startIndex, endIndex - startIndex + 1); 
+            }
+        }
+
+        public static void GetWhitespacesIndexes(this ref ReadOnlySpan<char> content, out int startIndex, out int endIndex, int start = 0, int? end = null)
+        {
+            int contentStartsAt = start;
             for (; contentStartsAt < content.Length; ++contentStartsAt)
             {
                 if (!char.IsWhiteSpace(content[contentStartsAt]))
@@ -41,7 +40,7 @@ namespace SpanTests.Core.Parsing
                 }
             }
 
-            int contentEndsAt = content.Length - 1;
+            int contentEndsAt = end ?? content.Length - 1;
             for (; contentEndsAt > contentStartsAt; --contentEndsAt)
             {
                 if (!char.IsWhiteSpace(content[contentEndsAt]))
@@ -50,10 +49,11 @@ namespace SpanTests.Core.Parsing
                 }
             }
 
-            return content.Slice(contentStartsAt, contentEndsAt - contentStartsAt + 1);
+            startIndex = contentStartsAt;
+            endIndex = contentEndsAt;
         }
 
-        public static int IndexOf(this ReadOnlySpan<char> content, char value, int startIndex)
+        public static int IndexOf(this ref ReadOnlySpan<char> content, char value, int startIndex)
         {
             for (int i = startIndex; i < content.Length; ++i)
             {
@@ -80,8 +80,10 @@ namespace SpanTests.Core.Parsing
                 throw new ArgumentException(nameof(content));
             }
 
-            content = content.Slice(startsAt, endsAt - startsAt);
-            return content.TrimWhitespaces();
+            content.GetWhitespacesIndexes(out int startIndex, out int endIndex, start: startsAt, end: endsAt);
+            content = content.Slice(startIndex, endIndex - startIndex);
+
+            return content;
         }
     }
 }

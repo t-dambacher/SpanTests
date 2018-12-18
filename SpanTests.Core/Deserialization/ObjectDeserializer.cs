@@ -13,7 +13,7 @@ namespace SpanTests.Core.Deserialization
     {
         public static object Deserialize(ref ReadOnlySpan<char> content, Type objectType)
         {
-            content = ObjectParser.GetBoundaries(ref content);
+            content = ObjectParser.GetBoundaries(content);
             var tokenizer = new JsonPropertyTokenizer(ref content);
 
             object result = CtorStore.CreateInstance(objectType);
