@@ -81,7 +81,7 @@ namespace SpanTests.Core.Deserialization
                 collectionType = GetCollectionType(elementType);
             }
 
-            return Activator.CreateInstance(collectionType);
+            return CtorStore.CreateInstance(collectionType);
         }
 
         private static Type GetCollectionType(Type elementType)

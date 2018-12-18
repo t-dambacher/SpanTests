@@ -57,7 +57,8 @@ namespace SpanTests.Core.Tokenization
             int separatorIndex = ArrayParser.GetNextArraySeparatorIndex(content, type);
 
             ReadOnlySpan<char> result = content.Slice(0, separatorIndex);
-            content = content.Slice(separatorIndex).TrimStartingSeparatorsAndWhitespaces();
+            content = content.Slice(separatorIndex);
+            content.TrimStartingSeparatorsAndWhitespaces();
 
             result = Parser.TryParse(ref result, out type);
 

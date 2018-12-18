@@ -90,7 +90,8 @@ namespace SpanTests.Core.Tokenization
         {
             ReadOnlySpan<char> result = Parser.TryParse(ref content, out type);
 
-            content = content.TrimStartingSeparatorsAndWhitespaces();
+            content.TrimStartingSeparatorsAndWhitespaces();
+
             return result;
         }
 

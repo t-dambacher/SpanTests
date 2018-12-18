@@ -1,5 +1,6 @@
 ﻿using SpanTests.Core.ObjectModel;
 using SpanTests.Core.Parsing;
+using SpanTests.Core.Reflection;
 using SpanTests.Core.Tokenization;
 using System;
 
@@ -23,7 +24,7 @@ namespace SpanTests.Core.Deserialization
             content = ObjectParser.GetBoundaries(content);
             var tokenizer = new JsonPropertyTokenizer(content);
 
-            object result = Activator.CreateInstance(objectType);
+            object result = CtorStore.CreateInstance(objectType);
 
             while (tokenizer.HasContent)
             {

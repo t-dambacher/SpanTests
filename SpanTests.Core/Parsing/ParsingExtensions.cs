@@ -10,7 +10,7 @@ namespace SpanTests.Core.Parsing
             return content.IsEmpty || content.IsWhiteSpace();
         }
 
-        public static ReadOnlySpan<char> TrimStartingSeparatorsAndWhitespaces(this ReadOnlySpan<char> content)
+        public static void TrimStartingSeparatorsAndWhitespaces(this ref ReadOnlySpan<char> content)
         {
             int contentStartsAt = 0;
             for (; contentStartsAt < content.Length; ++contentStartsAt)
@@ -22,7 +22,12 @@ namespace SpanTests.Core.Parsing
                 }
             }
 
-            return content.Slice(contentStartsAt);
+            if (contentStartsAt == 0)
+            {
+                return;
+            }
+
+            content = content.Slice(contentStartsAt);
         }
 
         public static ReadOnlySpan<char> TrimWhitespaces(this ReadOnlySpan<char> content)
