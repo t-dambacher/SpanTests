@@ -3,11 +3,11 @@ using System.Collections.Generic;
 using System.Linq.Expressions;
 using System.Reflection;
 
-namespace SpanTests.Core.ObjectModel
+namespace SpanTests.Core.Reflection
 {
     sealed internal class FieldStore : ReflectionStore<FieldInfo, FieldStore>
     {
-        public static (Action<object, object> setter, Type expectedType)? GetFieldSetter(Type targetType, string propertyName)
+        public static SetterInfo? GetFieldSetter(Type targetType, string propertyName)
         {
             return Instance.GetSetter(targetType, propertyName);
         }

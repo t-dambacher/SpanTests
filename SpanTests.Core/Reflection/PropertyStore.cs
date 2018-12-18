@@ -2,11 +2,11 @@
 using System.Linq.Expressions;
 using System.Reflection;
 
-namespace SpanTests.Core.ObjectModel
+namespace SpanTests.Core.Reflection
 {
     sealed internal class PropertyStore : ReflectionStore<PropertyInfo, PropertyStore>
     {
-        public static (Action<object, object> setter, Type expectedType)? GetPropertySetter(Type targetType, string propertyName)
+        public static SetterInfo? GetPropertySetter(Type targetType, string propertyName)
         {
             return Instance.GetSetter(targetType, propertyName);
         }

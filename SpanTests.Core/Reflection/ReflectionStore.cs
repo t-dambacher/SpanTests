@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq.Expressions;
 using System.Reflection;
 
-namespace SpanTests.Core.ObjectModel
+namespace SpanTests.Core.Reflection
 {
     internal abstract class ReflectionStore<TMemberInfo, TStore>
         where TMemberInfo : MemberInfo
@@ -11,12 +11,12 @@ namespace SpanTests.Core.ObjectModel
     {
         private static readonly Type objectType = typeof(object);
         protected static TStore Instance { get; } = new TStore();
-        private static readonly Dictionary<Type, Dictionary<string, (Action<object, object> setter, Type expectedType)>> setters = new Dictionary<Type, Dictionary<string, (Action<object, object> setter, Type expectedType)>>();
+        private static readonly Dictionary<Type, Dictionary<string, SetterInfo>> setters = new Dictionary<Type, Dictionary<string, SetterInfo>>();
         protected const BindingFlags Flags = BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.IgnoreCase;
 
-        protected private static (Action<object, object> setter, Type expectedType)? TryGetSetterFromStore(Type targetType, string memberName)
+        protected private static SetterInfo? TryGetSetterFromStore(Type targetType, string memberName)
         {
-            if (setters.TryGetValue(targetType, out Dictionary<string, (Action<object, object> setter, Type expectedType)> targetTypeMembers) && targetTypeMembers.TryGetValue(memberName, out (Action<object, object> setter, Type expectedType) result))
+            if (setters.TryGetValue(targetType, out Dictionary<string, SetterInfo> targetTypeMembers) && targetTypeMembers.TryGetValue(memberName, out SetterInfo result))
             {
                 return result;
             }
@@ -24,20 +24,20 @@ namespace SpanTests.Core.ObjectModel
             return null;
         }
 
-        protected private static void Store(string memberName, Type targetType, (Action<object, object> setter, Type expectedType) result)
+        protected private static void Store(string memberName, Type targetType, SetterInfo result)
         {
-            if (!setters.TryGetValue(targetType, out Dictionary<string, (Action<object, object> setter, Type expectedType)> targetTypeMembers))
+            if (!setters.TryGetValue(targetType, out Dictionary<string, SetterInfo> targetTypeMembers))
             {
-                targetTypeMembers = new Dictionary<string, (Action<object, object> setter, Type expectedType)>();
+                targetTypeMembers = new Dictionary<string, SetterInfo>();
                 setters.Add(targetType, targetTypeMembers);
             }
 
             targetTypeMembers.Add(memberName, result);
         }
 
-        protected (Action<object, object> setter, Type expectedType)? GetSetter(Type targetType, string memberName)
+        protected SetterInfo? GetSetter(Type targetType, string memberName)
         {
-            (Action<object, object> setter, Type expectedType)? result = TryGetSetterFromStore(targetType, memberName);
+            SetterInfo? result = TryGetSetterFromStore(targetType, memberName);
             if (result != null)
             {
                 return result;
@@ -46,13 +46,13 @@ namespace SpanTests.Core.ObjectModel
             result = TryGetSetterFromRuntime(targetType, memberName);
             if (result != null)
             {
-                Store(memberName, targetType, result.Value);
+                Store(memberName, targetType, result);
             }
 
             return result;
         }
 
-        private (Action<object, object> setter, Type expectedType)? TryGetSetterFromRuntime(Type targetType, string memberName)
+        private SetterInfo? TryGetSetterFromRuntime(Type targetType, string memberName)
         {
             TMemberInfo? member = TryGetMember(targetType, memberName);
             if (member == null)
@@ -72,7 +72,7 @@ namespace SpanTests.Core.ObjectModel
             MemberExpression getter = GetMemberExpression(convertedTarget, member);
                 
             var setter = Expression.Assign(getter, Expression.Convert(valueParam, memberType));
-            return (Expression.Lambda<Action<object, object>>(setter, targetParam, valueParam).Compile(), memberType);
+            return new SetterInfo(Expression.Lambda<Action<object, object>>(setter, targetParam, valueParam).Compile(), memberType);
         }
 
         protected abstract TMemberInfo? TryGetMember(Type targetType, string memberName);

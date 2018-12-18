@@ -1,5 +1,6 @@
 ﻿using SpanTests.Core.ObjectModel;
 using SpanTests.Core.Parsing;
+using SpanTests.Core.Reflection;
 using SpanTests.Core.Tokenization;
 using System;
 using System.Collections.Generic;
@@ -77,13 +78,13 @@ namespace SpanTests.Core.Deserialization
             }
             else
             {
-                collectionType = GetListType(elementType);
+                collectionType = GetCollectionType(elementType);
             }
 
             return Activator.CreateInstance(collectionType);
         }
 
-        private static Type GetListType(Type elementType)
+        private static Type GetCollectionType(Type elementType)
         {
             if (elementTypes.TryGetValue(elementType, out Type result))
             {

@@ -1,5 +1,6 @@
 ﻿using SpanTests.Core.Deserialization;
 using SpanTests.Core.Parsing;
+using SpanTests.Core.Reflection;
 using SpanTests.Core.Tokenization;
 using System;
 
@@ -37,9 +38,9 @@ namespace SpanTests.Core.ObjectModel
 
         public void SetOn(object target)
         {
-            (Action<object, object> setter, Type expectedType) = target.GetSetter(this.Name);
-            object value = GetValue(expectedType);
-            setter(target, value);
+            SetterInfo setter = target.GetSetter(this.Name);
+            object value = GetValue(setter.ExpectedType);
+            setter.Setter(target, value);
         }
 
         public object GetValue(Type expectedType)

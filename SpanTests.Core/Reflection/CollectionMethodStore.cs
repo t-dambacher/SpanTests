@@ -4,7 +4,7 @@ using System.Linq.Expressions;
 using System.Reflection;
 using System.Text;
 
-namespace SpanTests.Core.Deserialization
+namespace SpanTests.Core.Reflection
 {
     static internal class CollectionMethodStore
     {

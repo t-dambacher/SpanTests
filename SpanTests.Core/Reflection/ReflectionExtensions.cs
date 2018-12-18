@@ -1,10 +1,10 @@
 ﻿using System;
 
-namespace SpanTests.Core.ObjectModel
+namespace SpanTests.Core.Reflection
 {
     internal static class ReflectionExtensions
     {
-        public static (Action<object, object> setter, Type expectedType) GetSetter(this object target, string propertyOrFieldName)
+        public static SetterInfo GetSetter(this object target, string propertyOrFieldName)
         {
             propertyOrFieldName = propertyOrFieldName.ToLowerInvariant();
             Type targetType = target.GetType();
