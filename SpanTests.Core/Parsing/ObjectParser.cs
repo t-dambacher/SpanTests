@@ -53,7 +53,7 @@ namespace SpanTests.Core.Parsing
 
         #region Static methods
 
-        public static ReadOnlySpan<char> GetBoundaries(ReadOnlySpan<char> content)
+        public static ReadOnlySpan<char> GetBoundaries(ref ReadOnlySpan<char> content)
         {
             return content.GetBoundaries(JsonToken.ObjectStart, JsonToken.ObjectEnd);
         }

@@ -16,12 +16,6 @@ namespace SpanTests.Core.ObjectModel
 
         #endregion
 
-        #region Instance fields
-
-        private readonly Deserializer deserializer;
-
-        #endregion
-
         #region Constructors
 
         public JsonObject(string name, JsonObjectType type, ReadOnlySpan<char> value)
@@ -29,7 +23,6 @@ namespace SpanTests.Core.ObjectModel
             this.Name = name;
             this.Type = type;
             this.Value = value;
-            this.deserializer = Deserializer.Get(type);
         }
 
         #endregion
@@ -45,7 +38,7 @@ namespace SpanTests.Core.ObjectModel
 
         public object GetValue(Type expectedType)
         {
-            return this.deserializer.Deserialize(this.Value, expectedType);
+            return Deserializer.Deserialize(this.Type, this.Value, expectedType);
         }
 
         #endregion

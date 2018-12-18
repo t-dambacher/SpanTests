@@ -15,8 +15,7 @@ namespace SpanTests.Core.Parsing
                 content = content.TrimWhitespaces();
                 ReadOnlySpan<char> result = Parser.TryParse(ref content, out JsonObjectType type);
 
-                Deserializer deserializer = Deserializer.Get(type);
-                return (T)deserializer.Deserialize(result, typeof(T));
+                return (T)Deserializer.Deserialize(type, result, typeof(T));
             }
             catch (Exception ex)
             {

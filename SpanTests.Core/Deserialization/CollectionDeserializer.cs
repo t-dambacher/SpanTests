@@ -11,19 +11,11 @@ namespace SpanTests.Core.Deserialization
     /// <summary>
     /// Deserializer for collections
     /// </summary>
-    internal sealed class CollectionDeserializer : Deserializer
+    internal static class CollectionDeserializer
     {
-        private static Dictionary<Type, Type> elementTypes = new Dictionary<Type, Type>();
+        private static readonly Dictionary<Type, Type> elementTypes = new Dictionary<Type, Type>();
 
-        /// <summary>
-        /// <see cref="IDeserializer.Type"/>
-        /// </summary>
-        public override JsonObjectType Type => JsonObjectType.Array;
-
-        /// <summary>
-        /// <see cref="IDeserializer.Deserialize(ReadOnlySpan{char}, Type)"/>
-        /// </summary>
-        public override object Deserialize(ReadOnlySpan<char> content, Type arrayType)
+        public static object Deserialize(ReadOnlySpan<char> content, Type arrayType)
         {
             object collection = BuildCollection(arrayType, out Type collectionType, out Type elementType);
 

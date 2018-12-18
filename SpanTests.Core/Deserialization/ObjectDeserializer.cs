@@ -9,20 +9,12 @@ namespace SpanTests.Core.Deserialization
     /// <summary>
     /// Deserializer for objects
     /// </summary>
-    internal sealed class ObjectDeserializer : Deserializer
+    internal static class ObjectDeserializer
     {
-        /// <summary>
-        /// <see cref="IDeserializer.Type"/>
-        /// </summary>
-        public override JsonObjectType Type => JsonObjectType.Object;
-
-        /// <summary>
-        /// <see cref="IDeserializer.Deserialize(ReadOnlySpan{char}, Type)"/>
-        /// </summary>
-        public override object Deserialize(ReadOnlySpan<char> content, Type objectType)
+        public static object Deserialize(ReadOnlySpan<char> content, Type objectType)
         {
-            content = ObjectParser.GetBoundaries(content);
-            var tokenizer = new JsonPropertyTokenizer(content);
+            content = ObjectParser.GetBoundaries(ref content);
+            var tokenizer = new JsonPropertyTokenizer(ref content);
 
             object result = CtorStore.CreateInstance(objectType);
 

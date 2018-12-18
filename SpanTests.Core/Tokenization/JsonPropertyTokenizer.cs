@@ -32,7 +32,7 @@ namespace SpanTests.Core.Tokenization
         /// <summary>
         /// Creates a new instance of a <see cref="JsonPropertyTokenizer"/>
         /// </summary>
-        public JsonPropertyTokenizer(ReadOnlySpan<char> content)
+        public JsonPropertyTokenizer(ref ReadOnlySpan<char> content)
         {
             this.content = content;
         }
