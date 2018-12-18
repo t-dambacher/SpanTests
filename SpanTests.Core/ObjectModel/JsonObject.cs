@@ -38,7 +38,8 @@ namespace SpanTests.Core.ObjectModel
 
         public object GetValue(Type expectedType)
         {
-            return Deserializer.Deserialize(this.Type, this.Value, expectedType);
+            ReadOnlySpan<char> value = this.Value;
+            return Deserializer.Deserialize(this.Type, ref value, expectedType);
         }
 
         #endregion
