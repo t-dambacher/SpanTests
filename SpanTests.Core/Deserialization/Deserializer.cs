@@ -33,13 +33,13 @@ namespace SpanTests.Core.Deserialization
         /// <summary>
         /// All known deserializers
         /// </summary>
-        private static readonly IEnumerable<Deserializer> deserializers = new Deserializer[]
+        private static readonly IReadOnlyDictionary<JsonObjectType, Deserializer> deserializers = new Deserializer[]
         {
             new CollectionDeserializer(),
             new ObjectDeserializer(),
             new PrimitiveDeserializer(),
             new StringDeserializer()
-        };
+        }.ToDictionary(d => d.Type);
 
         #endregion
 
@@ -50,7 +50,7 @@ namespace SpanTests.Core.Deserialization
         /// </summary>
         public static Deserializer Get(JsonObjectType type)
         {
-            return deserializers.FirstOrDefault(d => d.Type == type) ?? throw new ArgumentException(nameof(type));
+            return deserializers.TryGetValue(type, out Deserializer result) ? result : throw new ArgumentException(nameof(type));
         }
 
         #endregion

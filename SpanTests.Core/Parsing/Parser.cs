@@ -1,7 +1,7 @@
 ﻿using SpanTests.Core.ObjectModel;
 using System;
-using System.Collections.Generic;
 using System.Linq;
+using System.Collections.Generic;
 
 namespace SpanTests.Core.Parsing
 {
@@ -30,13 +30,13 @@ namespace SpanTests.Core.Parsing
 
         #region Static fields
 
-        private static readonly IEnumerable<Parser> parsers = new Parser[]
+        private static readonly IReadOnlyDictionary<JsonObjectType, Parser> parsers = new Parser[]
         {
             new ArrayParser(),
             new ObjectParser(),
             new PrimitiveParser(),
             new StringParser()
-        };
+        }.ToDictionary(p => p.Type);
 
         #endregion
 
@@ -47,8 +47,7 @@ namespace SpanTests.Core.Parsing
             type = JsonObject.GetType(content);
             JsonObjectType expectedParserType = type;
 
-            Parser? parser = parsers.FirstOrDefault(p => p.Type == expectedParserType);
-            if (parser == null)
+            if (!parsers.TryGetValue(expectedParserType, out Parser parser))
             {
                 throw new InvalidOperationException("Unsupported object type");
             }
