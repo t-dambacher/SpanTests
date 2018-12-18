@@ -33,7 +33,7 @@ namespace SpanTests.Core.Deserialization
         /// <summary>
         /// All known deserializers
         /// </summary>
-        private static readonly IReadOnlyDictionary<JsonObjectType, Deserializer> deserializers = new Deserializer[]
+        private static readonly Dictionary<JsonObjectType, Deserializer> deserializers = new Deserializer[]
         {
             new CollectionDeserializer(),
             new ObjectDeserializer(),

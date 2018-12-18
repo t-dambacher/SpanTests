@@ -37,7 +37,7 @@ namespace SpanTests.Core.Deserialization
             return collection;
         }
 
-        private static IEnumerable<object> GetSubElements(ReadOnlySpan<char> content, Type elementType)
+        private static List<object> GetSubElements(ReadOnlySpan<char> content, Type elementType)
         {
             List<object> result = new List<object>();
 
@@ -52,7 +52,7 @@ namespace SpanTests.Core.Deserialization
             return result;
         }
 
-        private static void AppendToCollection(object collection, IEnumerable<object> elements, Type collectionType, Type elementType)
+        private static void AppendToCollection(object collection, List<object> elements, Type collectionType, Type elementType)
         {
             Action<object, object> adder = CollectionMethodStore.GetAddMethod(collectionType, elementType);
 
@@ -94,6 +94,5 @@ namespace SpanTests.Core.Deserialization
             elementTypes.Add(elementType, result);
             return result;
         }
-
     }
 }

@@ -9,20 +9,12 @@ namespace SpanTests.Core.Deserialization
     /// </summary>
     internal sealed class PrimitiveDeserializer : Deserializer
     {
-        private static readonly Type stringType = typeof(string);
-
         #region Properties
 
         /// <summary>
         /// <see cref="IDeserializer.Type"/>
         /// </summary>
         public override JsonObjectType Type => JsonObjectType.Primitive;
-
-        #endregion
-
-        #region Instance fields
-
-        private readonly Lazy<Deserializer> stringDeserializer = new Lazy<Deserializer>(() => Get(JsonObjectType.String));
 
         #endregion
 
@@ -33,7 +25,7 @@ namespace SpanTests.Core.Deserialization
         /// </summary>
         public override object Deserialize(ReadOnlySpan<char> content, Type primitiveType)
         {
-            string value = (string)stringDeserializer.Value.Deserialize(content, stringType);
+            string value = StringDeserializer.Deserialize(content);
             return TypeDescriptor.GetConverter(primitiveType).ConvertFromString(value);
         }
 

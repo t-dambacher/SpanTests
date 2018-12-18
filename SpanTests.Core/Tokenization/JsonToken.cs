@@ -47,6 +47,21 @@ namespace SpanTests.Core.Tokenization
 
         #endregion
 
+        #region Static fields
+
+        private static readonly Dictionary<char, JsonTokenType> values = new Dictionary<char, JsonTokenType>
+        {
+            { ObjectStart, JsonTokenType.ObjectStart },
+            { ObjectEnd, JsonTokenType.ObjectEnd },
+            { ArrayStart, JsonTokenType.ArrayStart },
+            { ArrayEnd, JsonTokenType.ArrayEnd },
+            { NameBoundary, JsonTokenType.NameBoundary },
+            { NameSeparator, JsonTokenType.NameSeparator },
+            { ObjectSeparator, JsonTokenType.ObjectSeparator }
+        };
+
+        #endregion
+
         #region Static methods
 
         /// <summary>
@@ -62,17 +77,6 @@ namespace SpanTests.Core.Tokenization
         /// </summary>
         public static JsonTokenType GetType(char token)
         {
-            var values = new Dictionary<char, JsonTokenType>
-            {
-                { ObjectStart, JsonTokenType.ObjectStart },
-                { ObjectEnd, JsonTokenType.ObjectEnd },
-                { ArrayStart, JsonTokenType.ArrayStart },
-                { ArrayEnd, JsonTokenType.ArrayEnd },
-                { NameBoundary, JsonTokenType.NameBoundary },
-                { NameSeparator, JsonTokenType.NameSeparator },
-                { ObjectSeparator, JsonTokenType.ObjectSeparator }
-            };
-
             if (values.TryGetValue(token, out JsonTokenType knownTokenType))
             {
                 return knownTokenType;

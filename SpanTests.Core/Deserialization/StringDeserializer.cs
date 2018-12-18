@@ -18,6 +18,11 @@ namespace SpanTests.Core.Deserialization
         /// </summary>
         public override object Deserialize(ReadOnlySpan<char> content, Type type)
         {
+            return Deserialize(content);
+        }
+
+        public static string Deserialize(ReadOnlySpan<char> content)
+        {
             return new string(content);
         }
     }
