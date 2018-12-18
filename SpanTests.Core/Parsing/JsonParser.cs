@@ -1,6 +1,5 @@
 ﻿using SpanTests.Core.Deserialization;
 using SpanTests.Core.ObjectModel;
-using SpanTests.Core.Tokenization;
 using System;
 
 namespace SpanTests.Core.Parsing

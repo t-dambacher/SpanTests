@@ -9,6 +9,8 @@ namespace SpanTests.Core.Deserialization
     /// </summary>
     internal sealed class PrimitiveDeserializer : Deserializer
     {
+        private static readonly Type stringType = typeof(string);
+
         #region Properties
 
         /// <summary>
@@ -31,7 +33,7 @@ namespace SpanTests.Core.Deserialization
         /// </summary>
         public override object Deserialize(ReadOnlySpan<char> content, Type primitiveType)
         {
-            string value = (string)stringDeserializer.Value.Deserialize(content, typeof(string));
+            string value = (string)stringDeserializer.Value.Deserialize(content, stringType);
             return TypeDescriptor.GetConverter(primitiveType).ConvertFromString(value);
         }
 

@@ -9,6 +9,7 @@ namespace SpanTests.Core.ObjectModel
         where TMemberInfo : MemberInfo
         where TStore : ReflectionStore<TMemberInfo, TStore>, new()
     {
+        private static readonly Type objectType = typeof(object);
         protected static TStore Instance { get; } = new TStore();
         private static readonly Dictionary<Type, Dictionary<string, (Action<object, object> setter, Type expectedType)>> setters = new Dictionary<Type, Dictionary<string, (Action<object, object> setter, Type expectedType)>>();
         protected const BindingFlags Flags = BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.IgnoreCase;
@@ -64,8 +65,8 @@ namespace SpanTests.Core.ObjectModel
 
             Type memberType = GetMemberType(member);
 
-            ParameterExpression targetParam = Expression.Parameter(typeof(object), "target");
-            ParameterExpression valueParam = Expression.Parameter(typeof(object), "value");
+            ParameterExpression targetParam = Expression.Parameter(objectType, "target");
+            ParameterExpression valueParam = Expression.Parameter(objectType, "value");
 
             UnaryExpression convertedTarget = Expression.Convert(targetParam, targetType);
             MemberExpression getter = GetMemberExpression(convertedTarget, member);

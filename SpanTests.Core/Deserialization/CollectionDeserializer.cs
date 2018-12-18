@@ -4,7 +4,6 @@ using SpanTests.Core.Tokenization;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
 
 namespace SpanTests.Core.Deserialization
 {
@@ -13,6 +12,8 @@ namespace SpanTests.Core.Deserialization
     /// </summary>
     internal sealed class CollectionDeserializer : Deserializer
     {
+        private static Dictionary<Type, Type> elementTypes = new Dictionary<Type, Type>();
+
         /// <summary>
         /// <see cref="IDeserializer.Type"/>
         /// </summary>
@@ -23,14 +24,14 @@ namespace SpanTests.Core.Deserialization
         /// </summary>
         public override object Deserialize(ReadOnlySpan<char> content, Type arrayType)
         {
-            object collection = BuildCollection(arrayType, out Type elementType);
+            object collection = BuildCollection(arrayType, out Type collectionType, out Type elementType);
 
             // Append objects to the collection
             if (!content.IsEmptyOrWhiteSpace())
             {
                 content = content.TrimWhitespaces();
 
-                AppendToCollection(collection, GetSubElements(content, elementType));
+                AppendToCollection(collection, GetSubElements(content, elementType), collectionType, elementType);
             }
 
             return collection;
@@ -51,18 +52,17 @@ namespace SpanTests.Core.Deserialization
             return result;
         }
 
-        private static void AppendToCollection(object collection, IEnumerable<object> elements)
+        private static void AppendToCollection(object collection, IEnumerable<object> elements, Type collectionType, Type elementType)
         {
-            // Dirty but works for now...
-            MethodInfo add = collection.GetType().GetMethod("Add");
+            Action<object, object> adder = CollectionMethodStore.GetAddMethod(collectionType, elementType);
 
             foreach (object element in elements)
             {
-                add.Invoke(collection, new[] { element });
+                adder(collection, element);
             }
         }
 
-        private static object BuildCollection(Type arrayType, out Type elementType)
+        private static object BuildCollection(Type arrayType, out Type collectionType, out Type elementType)
         {
             if (!arrayType.IsConstructedGenericType)
             {
@@ -73,10 +73,27 @@ namespace SpanTests.Core.Deserialization
 
             if (!arrayType.IsInterface)
             {
-                return Activator.CreateInstance(arrayType);
+                collectionType = arrayType;
+            }
+            else
+            {
+                collectionType = GetListType(elementType);
             }
 
-            return Activator.CreateInstance(typeof(List<>).MakeGenericType(elementType)); // Hardcore but works for now...
+            return Activator.CreateInstance(collectionType);
         }
+
+        private static Type GetListType(Type elementType)
+        {
+            if (elementTypes.TryGetValue(elementType, out Type result))
+            {
+                return result;
+            }
+
+            result = typeof(List<>).MakeGenericType(elementType); // Hardcore but works for now...
+            elementTypes.Add(elementType, result);
+            return result;
+        }
+
     }
 }
