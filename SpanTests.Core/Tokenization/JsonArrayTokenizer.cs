@@ -53,12 +53,11 @@ namespace SpanTests.Core.Tokenization
 
         private ReadOnlySpan<char> TryParseContent(out JsonObjectType type)
         {
-            type = JsonObject.GetType(content);
-            int separatorIndex = ArrayParser.GetNextArraySeparatorIndex(content, type);
+            type = JsonObject.GetType(ref content);
+            int separatorIndex = ArrayParser.GetNextArraySeparatorIndex(ref content, type);
 
             ReadOnlySpan<char> result = content.Slice(0, separatorIndex);
-            content = content.Slice(separatorIndex);
-            content.TrimStartingSeparatorsAndWhitespaces();
+            content = content.Slice(content.GetContentStartIndex(separatorIndex));
 
             result = Parser.TryParse(ref result, out type);
 

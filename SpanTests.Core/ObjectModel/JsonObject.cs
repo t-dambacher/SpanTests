@@ -46,7 +46,7 @@ namespace SpanTests.Core.ObjectModel
 
         #region Static methods
 
-        public static JsonObjectType GetType(ReadOnlySpan<char> content)
+        public static JsonObjectType GetType(ref ReadOnlySpan<char> content)
         {
             JsonTokenType tokenType = JsonToken.GetType(content);
 

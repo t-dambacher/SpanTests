@@ -10,7 +10,7 @@ namespace SpanTests.Core.Parsing
         {
             try
             {
-                content = content.TrimWhitespaces();
+                content.TrimWhitespaces();
                 ReadOnlySpan<char> result = Parser.TryParse(ref content, out JsonObjectType type);
 
                 return (T)Deserializer.Deserialize(type, ref result, typeof(T));

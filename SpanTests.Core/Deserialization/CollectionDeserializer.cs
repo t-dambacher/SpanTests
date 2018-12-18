@@ -22,7 +22,7 @@ namespace SpanTests.Core.Deserialization
             // Append objects to the collection
             if (!content.IsEmptyOrWhiteSpace())
             {
-                content = content.TrimWhitespaces();
+                content.TrimWhitespaces();
 
                 AppendToCollection(collection, ref content, collectionType, elementType);
             }

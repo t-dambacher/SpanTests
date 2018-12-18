@@ -21,9 +21,9 @@ namespace SpanTests
         }
 
         [TestMethod]
-        public void Performance_WholeObjectDeserialization_AreBetterThanNewtonsofts()
+        public void Performance_WholeObjectDeserialization_IsFasterThanNewtonsofts()
         {
-            string content = GetTestJson();
+            string content = GetWholeTestObjectJson();
             TimeSpan jsonNet = Mesure(json => JsonConvert.DeserializeObject<Dto>(json), content);
             TimeSpan mine = Mesure(json => Json.Deserialize<Dto>(json), content);
 
@@ -32,16 +32,27 @@ namespace SpanTests
         }
 
         [TestMethod]
-        public void Performance_CollectionDeserialization_AreBetterThanNewtonsofts()
+        public void Performance_CollectionDeserialization_IsFasterThanNewtonsofts()
         {
-            string content = GetCollectionTestJson();
+            string content = GetCollectionObjectJson();
             TimeSpan jsonNet = Mesure(json => JsonConvert.DeserializeObject<List<IdentifierDto>>(json), content);
             TimeSpan mine = Mesure(json => Json.Deserialize<List<IdentifierDto>>(json), content);
 
             _context.WriteLine($"Mine: {mine.TotalMilliseconds}. Newtonsoft's: {jsonNet.TotalMilliseconds}.");
             Assert.IsTrue(mine < jsonNet, $"Mine: {mine.TotalMilliseconds}. Newtonsoft's: {jsonNet.TotalMilliseconds}." + $"Still {(int)(mine.TotalMilliseconds / jsonNet.TotalMilliseconds)} times too long...");
         }
-        
+
+        [TestMethod]
+        public void Performance_SimpleDeserialization_IsFasterThanNewtonsofts()
+        {
+            string content = GetSimpleObjectJson();
+            TimeSpan jsonNet = Mesure(json => JsonConvert.DeserializeObject<IdentifierDto>(json), content);
+            TimeSpan mine = Mesure(json => Json.Deserialize<IdentifierDto>(json), content);
+
+            _context.WriteLine($"Mine: {mine.TotalMilliseconds}. Newtonsoft's: {jsonNet.TotalMilliseconds}.");
+            Assert.IsTrue(mine < jsonNet, $"Still {(int)(mine.TotalMilliseconds / jsonNet.TotalMilliseconds)} times too long...");
+        }
+
         private TimeSpan Mesure(Action<string> deserializer, string json)
         {
             Stopwatch watch = Stopwatch.StartNew();
@@ -55,7 +66,12 @@ namespace SpanTests
             return watch.Elapsed;
         }
 
-        private static string GetCollectionTestJson()
+        private static string GetSimpleObjectJson()
+        {
+            return "   { \"id\": 3 }";
+        }
+
+        private static string GetCollectionObjectJson()
         {
             return "["
                 + "   { \"id\": 3 }, "
@@ -63,7 +79,7 @@ namespace SpanTests
                 + "]";
         }
 
-        private static string GetTestJson()
+        private static string GetWholeTestObjectJson()
         {
             return "{"
                 + "\"value\": \"TestValue\","

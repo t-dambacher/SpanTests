@@ -1,7 +1,5 @@
 ﻿using SpanTests.Core.ObjectModel;
 using System;
-using System.Linq;
-using System.Collections.Generic;
 
 namespace SpanTests.Core.Parsing
 {
@@ -14,7 +12,7 @@ namespace SpanTests.Core.Parsing
 
         public static ReadOnlySpan<char> TryParse(ref ReadOnlySpan<char> content, out JsonObjectType type)
         {
-            JsonObjectType expectedParserType = JsonObject.GetType(content);
+            JsonObjectType expectedParserType = JsonObject.GetType(ref content);
             type = expectedParserType;
 
             switch (expectedParserType)

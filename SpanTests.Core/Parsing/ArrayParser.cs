@@ -38,16 +38,16 @@ namespace SpanTests.Core.Parsing
             return array;
         }
 
-        public static int GetNextArraySeparatorIndex(ReadOnlySpan<char> content, JsonObjectType expectedType)
+        public static int GetNextArraySeparatorIndex(ref ReadOnlySpan<char> content, JsonObjectType expectedType)
         {
             switch (expectedType)
             {
                 case JsonObjectType.Primitive:
                     return content.IndexOf(JsonToken.ObjectSeparator);
                 case JsonObjectType.String:
-                    return GetNextArraySeparatorIndexForString(content);
+                    return GetNextArraySeparatorIndexForString(ref content);
                 case JsonObjectType.Object:
-                    return GetNextArraySeparatorIndexForObject(content);
+                    return GetNextArraySeparatorIndexForObject(ref content);
                 case JsonObjectType.Array:
                     throw new InvalidOperationException("Currently not supported"); // difficult with the current impl, needs recursion...
             }
@@ -55,7 +55,7 @@ namespace SpanTests.Core.Parsing
             throw new ArgumentException(nameof(expectedType));
         }
 
-        private static int GetNextArraySeparatorIndexForObject(ReadOnlySpan<char> content)
+        private static int GetNextArraySeparatorIndexForObject(ref ReadOnlySpan<char> content)
         {
             // difficult with the current impl, needs recursion...
             for (int separatorIndex = 0, curlyBracesCount = 0; separatorIndex < content.Length; ++separatorIndex)
@@ -77,7 +77,7 @@ namespace SpanTests.Core.Parsing
             return content.Length;
         }
 
-        private static int GetNextArraySeparatorIndexForString(ReadOnlySpan<char> content)
+        private static int GetNextArraySeparatorIndexForString(ref ReadOnlySpan<char> content)
         {
             bool nameBoundaryFound = false;
             for (int separatorIndex = 0; separatorIndex < content.Length; ++separatorIndex)

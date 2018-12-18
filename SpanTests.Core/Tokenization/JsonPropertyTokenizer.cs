@@ -81,7 +81,8 @@ namespace SpanTests.Core.Tokenization
                 throw new InvalidOperationException("Unable to find a separator in the content");
             }
 
-            content = content.Slice(nameSeparatorAt).TrimWhitespaces();
+            content = content.Slice(nameSeparatorAt);
+            content.TrimWhitespaces();
 
             return name;
         }
@@ -90,7 +91,11 @@ namespace SpanTests.Core.Tokenization
         {
             ReadOnlySpan<char> result = Parser.TryParse(ref content, out type);
 
-            content.TrimStartingSeparatorsAndWhitespaces();
+            int contentIndex = content.GetContentStartIndex();
+            if (contentIndex != 0)
+            {
+                content = content.Slice(contentIndex);
+            }
 
             return result;
         }
